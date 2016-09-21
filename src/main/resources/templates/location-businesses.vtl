@@ -1,0 +1,23 @@
+<h1>$location.getCity(), $location.getState()</h1>
+<div class="row">
+  <div class="col-md-4">
+    <h3>Add a business</h3>
+    <form action="/locations/$location.getId()/businesses/add" method="post">
+      <div class="form-group">
+        <label for="business-name">Enter the business name:</label>
+        <input type="text" class="form-control" name="business-name">
+      </div>
+      <button class="btn btn-primary" action="submit">Add</button>
+    </form>
+  </div>
+  <div class="col-md-8">
+    <h3>Businesses List</h3>
+    <ul>
+      #foreach ($business in $businesses)
+        <li>
+          <a href="/locations/$location.getId()/businesses/$business.getId()">$business.getName()</a>
+        </li>
+      #end
+    </ul>
+  </div>
+</div>

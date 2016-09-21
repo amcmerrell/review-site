@@ -1,7 +1,10 @@
-<form action="/" method="post">
-  <div class ="form-group">
-    <label for="business">Add Business</label>
-    <input id="business" class="form-control" name="business" type="text">
-  </div>
-    <button type="submit" class="btn">Submit business</button>
+
+<form action="/locations/id/businesses" method="post">
+  <label for="">Select a List</label>
+  <select id='locationId' name='locationId' type='text'>
+    #foreach($location in $locations)
+      <option value="$location.getId()">$location.getCity(), $location.getState()</option>
+    #end
+  </select>
+  <button type="submit" class="btn btn-success">Select location</button>
 </form>

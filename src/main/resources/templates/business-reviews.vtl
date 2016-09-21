@@ -1,0 +1,33 @@
+<h1>$business.getName()</h1>
+<div class="row">
+  <div class="col-md-4">
+    <h3>Add a review</h3>
+    <form action="/locations/$business.getLocationId()/businesses/$business.getId()/add" method="post">
+      <div class="form-group">
+        <label for="review-score">Enter a rating for $business.getName()</label>
+        <select id='review-score' name='review-score' type='number'>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="review-comment">Tell us a little bit about your experience.</label>
+        <input type="text" class="form-control" name="review-comment">
+      </div>
+      <button class="btn btn-primary" action="submit">Add</button>
+    </form>
+  </div>
+  <div class="col-md-8">
+    <h3>Reviews</h3>
+    <ul>
+      #foreach ($business in $businesses)
+        <li>
+          <a href="/locations/$location.getId()/businesses/$business.getId()">$business.getName()</a>
+        </li>
+      #end
+    </ul>
+  </div>
+</div>
