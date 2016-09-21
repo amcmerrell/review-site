@@ -42,15 +42,6 @@ public class Business{
     }
   }
 
-  public static Business find(int id){
-    String sql = "SELECT * FROM businesses WHERE id = :id";
-    try(Connection con = DB.sql2o.open()){
-      return con.createQuery(sql)
-          .addParameter("id",id)
-          .executeAndFetchFirst(Business.class);
-    }
-  }
-
   public void save(){
     String sql = "INSERT INTO businesses (name, locationId) VALUES (:name, :locationId)";
     try(Connection con = DB.sql2o.open()){
@@ -59,6 +50,15 @@ public class Business{
           .addParameter("locationId", this.locationId)
           .executeUpdate()
           .getKey();
+    }
+  }
+
+  public static Business find(int id){
+    String sql = "SELECT * FROM businesses WHERE id = :id";
+    try(Connection con = DB.sql2o.open()){
+      return con.createQuery(sql)
+          .addParameter("id",id)
+          .executeAndFetchFirst(Business.class);
     }
   }
 
@@ -91,4 +91,12 @@ public class Business{
     }
   }
 
+  public List<Review> getReviews() {
+    String sql = "SELECT * FROM reviews WHERE businessId = :id";
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery(sql)
+        .addParameter("id", this.id)
+        .executeAndFetch(Review.class);
+    }
+  }
 }

@@ -8,7 +8,7 @@ public class LocationTest {
 
   @Before
     public void setUp() {
-      DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/reviews_test", null, null);
+      DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/review_site_test", null, null);
       testLocation = new Location("Oregon", "Portland");
       testLocation.save();
     }

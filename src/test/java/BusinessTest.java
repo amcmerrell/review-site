@@ -1,5 +1,6 @@
 import org.junit.*;
 import static org.junit.Assert.*;
+import java.util.List;
 import org.sql2o.*;
 
 public class BusinessTest {
@@ -7,7 +8,7 @@ public class BusinessTest {
   Business testBusness;
   @Before
     public void setUp() {
-      DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/reviews_test", null, null);
+      DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/review_site_test", null, null);
       testLocation = new Location("Oregon", "Portland");
       testLocation.save();
       testBusness = new Business("Applebees",testLocation.getId());
@@ -19,8 +20,10 @@ public class BusinessTest {
     try(Connection con = DB.sql2o.open()) {
       String deleteBusinessQuery = "DELETE FROM businesses *;";
       String deleteLocationsQuery = "DELETE FROM locations *;";
+      String deleteReviewsQuery = "DELETE FROM reviews *;";
       con.createQuery(deleteBusinessQuery).executeUpdate();
       con.createQuery(deleteLocationsQuery).executeUpdate();
+      con.createQuery(deleteReviewsQuery).executeUpdate();
     }
   }
 
@@ -70,5 +73,17 @@ public class BusinessTest {
     int testId = testBusness.getId();
     testBusness.delete();
     assertNull(Business.find(testId));
+  }
+
+  @Test
+  public void getReviews_returnsReviews_true() {
+    Business testBusness2 = new Business("Epicodus", testLocation.getId());
+    testBusness2.save();
+    Review testReview = new Review(5,"Was a great place to dine",testBusness.getId());
+    testReview.save();
+    Review secondReview = new Review(1, "Not that great.", testBusness2.getId());
+    secondReview.save();
+    List<Review> testList = testBusness2.getReviews();
+    assertTrue(!(testList.contains(testReview)) && testList.contains(secondReview));
   }
 }

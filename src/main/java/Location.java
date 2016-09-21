@@ -23,6 +23,18 @@ public class Location{
     return id;
   }
 
+  @Override
+  public boolean equals(Object otherLocation) {
+    if (!(otherLocation instanceof Location)) {
+      return false;
+    } else {
+      Location newLocation = (Location) otherLocation;
+      return this.getState().equals(newLocation.getState()) &&
+        this.getCity().equals(newLocation.getCity()) &&
+        this.getId() == newLocation.getId();
+    }
+  }
+
   public static List<Location> all() {
     String sql = "SELECT * FROM locations";
     try(Connection con = DB.sql2o.open()) {
@@ -65,15 +77,6 @@ public class Location{
     }
   }
 
-  public List<Business> getBusinesses(){
-    String sql = "SELECT * FROM businesses where locationId = :id";
-    try(Connection con = DB.sql2o.open()){
-      return con.createQuery(sql)
-                .addParameter("id",this.id)
-                .executeAndFetch(Business.class);
-    }
-  }
-
   public void delete() {
     String sql = "DELETE FROM locations WHERE id = :id";
     try(Connection con = DB.sql2o.open()) {
@@ -83,15 +86,12 @@ public class Location{
     }
   }
 
-  @Override
-  public boolean equals(Object otherLocation) {
-    if (!(otherLocation instanceof Location)) {
-      return false;
-    } else {
-      Location newLocation = (Location) otherLocation;
-      return this.getState().equals(newLocation.getState()) &&
-        this.getCity().equals(newLocation.getCity()) &&
-        this.getId() == newLocation.getId();
+  public List<Business> getBusinesses(){
+    String sql = "SELECT * FROM businesses where locationId = :id";
+    try(Connection con = DB.sql2o.open()){
+      return con.createQuery(sql)
+                .addParameter("id",this.id)
+                .executeAndFetch(Business.class);
     }
   }
 }
