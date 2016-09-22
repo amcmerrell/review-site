@@ -45,14 +45,40 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-    get("/locations/:location_id/businesses/:id", (request, response) -> {
+    get("/locations/:location_id/businesses/:id/reviews", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Location myLocation = Location.find(Integer.parseInt(request.params(":location_id")));
       Business aBusiness = Business.find(Integer.parseInt(request.params(":id")));
       model.put("location", myLocation);
       model.put("business", aBusiness);
+      model.put("reviews", aBusiness.getReviews());
       model.put("template", "templates/business-reviews.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
+
+    get("/locations/:location_id/businesses/:business_id/reviews/:id/delete", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      int locationId = Integer.parseInt(request.params(":location_id"));
+      int businessId = Integer.parseInt(request.params(":business_id"));
+      Review deletedReview = Review.find(Integer.parseInt(request.params(":id")));
+      deletedReview.delete();
+      response.redirect("/locations/"+ locationId +"/businesses/" + businessId + "/reviews");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/locations/:location_id/businesses/:business_id/reviews/add", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      int locationId = Integer.parseInt(request.params(":location_id"));
+      int businessId = Integer.parseInt(request.params(":business_id"));
+      int reviewScore = Integer.parseInt(request.queryParams("review-score"));
+      String reviewerName = request.queryParams("reviewer-name");
+      String reviewTitle = request.queryParams("review-title");
+      String reviewComment = request.queryParams("review-comment");
+      Review aReview = new Review(reviewScore,reviewerName,reviewComment,reviewTitle,businessId);
+      aReview.save();
+      response.redirect("/locations/"+ locationId +"/businesses/" + businessId + "/reviews");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
   }
 }

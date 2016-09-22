@@ -1,5 +1,6 @@
 import org.sql2o.*;
 import java.util.List;
+import java.lang.Math;
 
 public class Business{
   private int id;
@@ -98,5 +99,27 @@ public class Business{
         .addParameter("id", this.id)
         .executeAndFetch(Review.class);
     }
+  }
+
+  public int calcNumReviews() {
+    return this.getReviews().size();
+  }
+
+  public double calcAverage(){
+    List<Review> reviews = this.getReviews();
+    double numberOfReviews = (double) this.calcNumReviews();
+    double sum = 0.0;
+    for(Review review :reviews){
+      sum += (double) review.getScore();
+    }
+    return sum/numberOfReviews;
+  }
+
+  public int calcAverageInt(){
+    return (int) Math.round(calcAverage() * 1d);
+  }
+
+  public double roundToHalf(){
+    return Math.round(calcAverage() * 2) / 2.0;
   }
 }

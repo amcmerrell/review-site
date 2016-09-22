@@ -5,10 +5,14 @@ public class Review{
   private int id;
   private int businessId;
   private int score;
+  private String reviewerName;
+  private String reviewTitle;
   private String reviewComment;
 
-  public Review(int score, String reviewComment, int businessId){
+  public Review(int score, String reviewerName, String reviewComment, String reviewTitle, int businessId){
     this.score = score;
+    this.reviewerName = reviewerName;
+    this.reviewTitle = reviewTitle;
     this.reviewComment = reviewComment;
     this.businessId = businessId;
   }
@@ -19,6 +23,14 @@ public class Review{
 
   public int getBusinessId(){
     return businessId;
+  }
+
+  public String getReviewerName(){
+    return reviewerName;
+  }
+
+  public String getReviewTitle(){
+    return reviewTitle;
   }
 
   public String getReviewComment(){
@@ -50,11 +62,13 @@ public class Review{
   }
 
   public void save(){
-    String sql = "INSERT INTO reviews (businessId, score, reviewComment) VALUES (:businessId, :score, :reviewComment)";
+    String sql = "INSERT INTO reviews (businessId, score, reviewerName, reviewTitle, reviewComment) VALUES (:businessId, :score, :reviewerName, :reviewTitle, :reviewComment)";
     try(Connection con = DB.sql2o.open()){
       this.id = (int) con.createQuery(sql, true)
           .addParameter("businessId", this.businessId)
           .addParameter("score", this.score)
+          .addParameter("reviewerName", this.reviewerName)
+          .addParameter("reviewTitle", this.reviewTitle)
           .addParameter("reviewComment", this.reviewComment)
           .executeUpdate()
           .getKey();

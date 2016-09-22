@@ -1,10 +1,11 @@
 
 <form action="/locations/id/businesses" method="post">
   <label for="">Select a List</label>
-  <select id='locationId' name='locationId' type='text'>
+  <select id='locationId' name='locationId' type='text' class="form-control">
     #foreach($location in $locations)
       <option value="$location.getId()">$location.getCity(), $location.getState()</option>
     #end
   </select>
+  <br>
   <button type="submit" class="btn btn-success">Select location</button>
 </form>

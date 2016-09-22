@@ -1,8 +1,8 @@
-<h1>$business.getName()</h1>
+
 <div class="row">
   <div class="col-md-4">
     <h3>Add a review</h3>
-    <form action="/locations/$business.getLocationId()/businesses/$business.getId()/add" method="post">
+    <form action="/locations/$business.getLocationId()/businesses/$business.getId()/reviews/add" method="post">
       <div class="form-group">
         <label for="review-score">Enter a rating for $business.getName()</label>
         <select id='review-score' name='review-score' type='number'>
@@ -14,6 +14,14 @@
         </select>
       </div>
       <div class="form-group">
+        <label for="reviewer-name">Enter your name.</label>
+        <input type="text" class="form-control" name="reviewer-name">
+      </div>
+      <div class="form-group">
+        <label for="review-title">Add a title for your review.</label>
+        <input type="text" class="form-control" name="review-title">
+      </div>
+      <div class="form-group">
         <label for="review-comment">Tell us a little bit about your experience.</label>
         <input type="text" class="form-control" name="review-comment">
       </div>
@@ -21,13 +29,33 @@
     </form>
   </div>
   <div class="col-md-8">
+    <h1>$business.getName()</h1>
+    <!-- <h3>Number of Reviews: $business.calcNumReviews()</h3> -->
+    #set( $int = $business.roundToHalf() )
+    #set( $img = "_star.png")
+    <img src="/img/$int$img"><span>$business.calcNumReviews() reviews</span>
+    <!-- <h3>Average review score: $business.calcAverage() in int $business.calcAverageInt()</h3> -->
     <h3>Reviews</h3>
-    <ul>
-      #foreach ($business in $businesses)
-        <li>
-          <a href="/locations/$location.getId()/businesses/$business.getId()">$business.getName()</a>
-        </li>
-      #end
-    </ul>
+    #foreach ($review in $reviews)
+      <div class="business-review">
+        <h4>$review.getReviewTitle()</h4>
+        <h5>$review.getReviewerName() | Rating: $review.getScore()</h5>
+        <p>$review.getReviewComment()</p>
+        <!-- <form action="/locations/$business.getLocationId()/businesses/$business.getId()/reviews/$review.getId()/delete" method="post"> -->
+          <button id= "$business.getLocationId()-$business.getId()-$review.getId()-$review.getReviewTitle()" class="delete btn btn-danger btn-xs" action="submit">Delete</button>
+        <!-- </form> -->
+      </div>
+    #end
   </div>
 </div>
+<script   src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
+<script>
+$( ".delete" ).click(function() {
+   var str =  this.id;
+   var arr = str.split("-");
+   var bool = confirm("Are you sure you want to delete " + arr[3] + "?");
+   if(bool){
+     window.location.replace("/locations/" + arr[0] + "/businesses/" + arr[1] + "/reviews/" + arr[2] + "/delete");
+   }
+});
+</script>
