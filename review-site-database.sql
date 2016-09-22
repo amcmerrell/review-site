@@ -10,14 +10,14 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -30,7 +30,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: businesses; Type: TABLE; Schema: public; Owner: Guest; Tablespace: 
+-- Name: businesses; Type: TABLE; Schema: public; Owner: Guest; Tablespace:
 --
 
 CREATE TABLE businesses (
@@ -64,7 +64,7 @@ ALTER SEQUENCE businesses_id_seq OWNED BY businesses.id;
 
 
 --
--- Name: locations; Type: TABLE; Schema: public; Owner: Guest; Tablespace: 
+-- Name: locations; Type: TABLE; Schema: public; Owner: Guest; Tablespace:
 --
 
 CREATE TABLE locations (
@@ -98,14 +98,17 @@ ALTER SEQUENCE locations_id_seq OWNED BY locations.id;
 
 
 --
--- Name: reviews; Type: TABLE; Schema: public; Owner: Guest; Tablespace: 
+-- Name: reviews; Type: TABLE; Schema: public; Owner: Guest; Tablespace:
 --
 
 CREATE TABLE reviews (
     id integer NOT NULL,
     businessid integer,
     score integer,
-    reviewcomment character varying
+    reviewcomment character varying,
+    reviewername character varying,
+    reviewtitle character varying,
+    locationid integer
 );
 
 
@@ -158,12 +161,9 @@ ALTER TABLE ONLY reviews ALTER COLUMN id SET DEFAULT nextval('reviews_id_seq'::r
 --
 
 COPY businesses (id, name, locationid) FROM stdin;
-1	Epicodus	2
-2	Applebees	2
-3	Applebees	1
-4	Epicodus	1
-5	Voodoo Donuts	1
-6	McDonald's	2
+8	Voodoo Doughnuts	1
+9	Some Pizza PLace	4
+11	foo	1
 \.
 
 
@@ -171,7 +171,7 @@ COPY businesses (id, name, locationid) FROM stdin;
 -- Name: businesses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('businesses_id_seq', 6, true);
+SELECT pg_catalog.setval('businesses_id_seq', 11, true);
 
 
 --
@@ -179,8 +179,9 @@ SELECT pg_catalog.setval('businesses_id_seq', 6, true);
 --
 
 COPY locations (id, state, city) FROM stdin;
-1	Oregon	Portland
-2	North Carolina	Raleigh
+4	NY	New York City
+1	OR	Portland
+6	NC	Raleigh
 \.
 
 
@@ -188,14 +189,18 @@ COPY locations (id, state, city) FROM stdin;
 -- Name: locations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('locations_id_seq', 2, true);
+SELECT pg_catalog.setval('locations_id_seq', 6, true);
 
 
 --
 -- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: Guest
 --
 
-COPY reviews (id, businessid, score, reviewcomment) FROM stdin;
+COPY reviews (id, businessid, score, reviewcomment, reviewername, reviewtitle, locationid) FROM stdin;
+42	8	4	I like donuts	Yusuf	Tasty!	1
+43	8	2	Long line, old donuts	Mr. Complainer	Not so great	1
+44	9	5	Yummmmmmmmmmmm. I liked the food.	Mr. Satisfied	Tasty!	4
+45	9	4	I'll come back!	Yusuf	Good	4
 \.
 
 
@@ -203,11 +208,11 @@ COPY reviews (id, businessid, score, reviewcomment) FROM stdin;
 -- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('reviews_id_seq', 1, false);
+SELECT pg_catalog.setval('reviews_id_seq', 50, true);
 
 
 --
--- Name: businesses_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace: 
+-- Name: businesses_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace:
 --
 
 ALTER TABLE ONLY businesses
@@ -215,7 +220,7 @@ ALTER TABLE ONLY businesses
 
 
 --
--- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace: 
+-- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace:
 --
 
 ALTER TABLE ONLY locations
@@ -223,7 +228,7 @@ ALTER TABLE ONLY locations
 
 
 --
--- Name: reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace: 
+-- Name: reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace:
 --
 
 ALTER TABLE ONLY reviews
@@ -243,4 +248,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
-
