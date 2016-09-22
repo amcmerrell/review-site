@@ -30,20 +30,17 @@
   </div>
   <div class="col-md-8">
     <h1>$business.getName()</h1>
-    <!-- <h3>Number of Reviews: $business.calcNumReviews()</h3> -->
+    <h4>$location.getCity(), $location.getState()</h4>
     #set( $int = $business.roundToHalf() )
     #set( $img = "_star.png")
     <img src="/img/$int$img"><span>$business.calcNumReviews() reviews</span>
-    <!-- <h3>Average review score: $business.calcAverage() in int $business.calcAverageInt()</h3> -->
     <h3>Reviews</h3>
     #foreach ($review in $reviews)
       <div class="business-review">
         <h4>$review.getReviewTitle()</h4>
         <h5>$review.getReviewerName() | Rating: $review.getScore()</h5>
         <p>$review.getReviewComment()</p>
-        <!-- <form action="/locations/$business.getLocationId()/businesses/$business.getId()/reviews/$review.getId()/delete" method="post"> -->
           <button id= "$business.getLocationId()-$business.getId()-$review.getId()-$review.getReviewTitle()" class="delete btn btn-danger btn-xs" action="submit">Delete</button>
-        <!-- </form> -->
       </div>
     #end
   </div>

@@ -4,17 +4,19 @@ import java.util.List;
 public class Review{
   private int id;
   private int businessId;
+  private int locationId;
   private int score;
   private String reviewerName;
   private String reviewTitle;
   private String reviewComment;
 
-  public Review(int score, String reviewerName, String reviewComment, String reviewTitle, int businessId){
+  public Review(int score, String reviewerName, String reviewComment, String reviewTitle, int businessId, int locationId){
     this.score = score;
     this.reviewerName = reviewerName;
     this.reviewTitle = reviewTitle;
     this.reviewComment = reviewComment;
     this.businessId = businessId;
+    this.locationId = locationId;
   }
 
   public int getId(){
@@ -22,6 +24,10 @@ public class Review{
   }
 
   public int getBusinessId(){
+    return businessId;
+  }
+
+  public int getLocationId(){
     return businessId;
   }
 
@@ -62,10 +68,11 @@ public class Review{
   }
 
   public void save(){
-    String sql = "INSERT INTO reviews (businessId, score, reviewerName, reviewTitle, reviewComment) VALUES (:businessId, :score, :reviewerName, :reviewTitle, :reviewComment)";
+    String sql = "INSERT INTO reviews (businessId, score, reviewerName, reviewTitle, reviewComment, locationId) VALUES (:businessId, :score, :reviewerName, :reviewTitle, :reviewComment, :locationId)";
     try(Connection con = DB.sql2o.open()){
       this.id = (int) con.createQuery(sql, true)
           .addParameter("businessId", this.businessId)
+          .addParameter("locationId", this.locationId)
           .addParameter("score", this.score)
           .addParameter("reviewerName", this.reviewerName)
           .addParameter("reviewTitle", this.reviewTitle)

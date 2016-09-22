@@ -1,4 +1,30 @@
+body {
+  background: url(https://hd.unsplash.com/photo-1442975631115-c4f7b05b8a2c) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Permanent Marker', cursive;
+}
+
+.container {
+  padding-bottom: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
 .business-review {
   border-bottom: 1px solid grey;
   padding-bottom: 5px;
+}
+
+.well{
+  background-color: rgba(255, 255, 255, 0.65);
+}
+
+#admin-options{
+  display: none;
 }

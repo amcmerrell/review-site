@@ -79,10 +79,18 @@ public class Location{
 
   public void delete() {
     String sql = "DELETE FROM locations WHERE id = :id";
+    String sql2 = "DELETE FROM businesses WHERE locationId = :locationId";
+    String sql3 = "DELETE FROM reviews WHERE locationId = :locationId";
     try(Connection con = DB.sql2o.open()) {
       con.createQuery(sql)
-      .addParameter("id", this.id)
-      .executeUpdate();
+        .addParameter("id", this.id)
+        .executeUpdate();
+      con.createQuery(sql2)
+        .addParameter("locationId", this.id)
+        .executeUpdate();
+      con.createQuery(sql3)
+          .addParameter("locationId", this.id)
+          .executeUpdate();
     }
   }
 

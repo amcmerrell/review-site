@@ -1,0 +1,12 @@
+<h1>Location update page for: $location.getCity(), $location.getState()</h1>
+<form action="/locations/$location.getId()/update" method="post">
+  <div class="form-group">
+    <label for="location-city">Enter a new city for the location.</label>
+    <input type="text" class="form-control" name="location-city">
+  </div>
+  <div class="form-group">
+    <label for="location-state">Enter the new state abbreviation for the location.</label>
+    <input type="text" class="form-control" name="location-state">
+  </div>
+  <button class="btn btn-primary" action="submit">Update</button>
+</form>

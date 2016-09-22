@@ -1,6 +1,6 @@
 
 <form action="/locations/id/businesses" method="post">
-  <label for="">Select a List</label>
+  <label for="">Select a Location</label>
   <select id='locationId' name='locationId' type='text' class="form-control">
     #foreach($location in $locations)
       <option value="$location.getId()">$location.getCity(), $location.getState()</option>
@@ -9,3 +9,42 @@
   <br>
   <button type="submit" class="btn btn-success">Select location</button>
 </form>
+<br>
+<div id="admin-options">
+  <h4>Add a new location</h4>
+  <form action="/locations/add" method="post">
+    <div class="form-group">
+      <label for="location-city">Enter a city for the new location.</label>
+      <input type="text" class="form-control" name="location-city">
+    </div>
+    <div class="form-group">
+      <label for="location-state">Enter the state abbreviation for the new location.</label>
+      <input type="text" class="form-control" name="location-state">
+    </div>
+    <button class="btn btn-primary" action="submit">Add</button>
+  </form>
+
+  <h4>Remove or update locations</h4>
+  <ul>
+    #foreach($location in $locations)
+      <li>$location.getCity(), $location.getState() <br><button id="$location.getId()-$location.getCity()-$location.getState()" class="delete btn btn-danger btn-xs">Delete</button>&nbsp;&nbsp;<a href="/locations/$location.getId()/update"class="btn btn-warning btn-xs">Update</a></li>
+    #end
+  </ul>
+</div>
+
+<script   src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
+<script>
+$( ".delete" ).click(function() {
+   var str =  this.id;
+   var arr = str.split("-");
+   var bool = confirm("Are you sure you want to delete " + arr[1] + ", " + arr[2] +"?");
+   if(bool){
+     window.location.replace("/locations/" + arr[0] + "/delete");
+   }
+});
+$(document).keypress(function(e) {
+    if(e.which == 13) {
+      $("#admin-options").show();
+    }
+});
+</script>

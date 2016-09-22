@@ -18,6 +18,45 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    post("/locations/add", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String locationCity = request.queryParams("location-city");
+      String locationState = request.queryParams("location-state");
+      Location myLocation = new Location(locationState,locationCity);
+      myLocation.save();
+      response.redirect("/");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/locations/:id/update", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      int locationId = Integer.parseInt(request.params(":id"));
+      Location updateLocation = Location.find(Integer.parseInt(request.params(":id")));
+      model.put("location",updateLocation);
+      model.put("template", "templates/location-update.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/locations/:id/update", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      int locationId = Integer.parseInt(request.params(":id"));
+      Location updateLocation = Location.find(Integer.parseInt(request.params(":id")));
+      String city = request.queryParams("location-city");
+      String state = request.queryParams("location-state");
+      updateLocation.updateCity(city);
+      updateLocation.updateState(state);
+      response.redirect("/");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/locations/:id/delete", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Location deletedLocation = Location.find(Integer.parseInt(request.params(":id")));
+      deletedLocation.delete();
+      response.redirect("/");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
     get("/locations/:id/businesses", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       int locationId = Integer.parseInt(request.params(":id"));
@@ -74,7 +113,7 @@ public class App {
       String reviewerName = request.queryParams("reviewer-name");
       String reviewTitle = request.queryParams("review-title");
       String reviewComment = request.queryParams("review-comment");
-      Review aReview = new Review(reviewScore,reviewerName,reviewComment,reviewTitle,businessId);
+      Review aReview = new Review(reviewScore,reviewerName,reviewComment,reviewTitle,businessId,locationId);
       aReview.save();
       response.redirect("/locations/"+ locationId +"/businesses/" + businessId + "/reviews");
       return new ModelAndView(model, layout);
